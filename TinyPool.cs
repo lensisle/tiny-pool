@@ -80,7 +80,7 @@ public class Pool
         poolableObject.Destroy();
     }
 
-    public void Extend(int extendQuantity)
+    public void Expand(int extendQuantity)
     {
         if (extendQuantity + m_pooledObjects.Count > m_maxPoolSize)
         {
@@ -115,9 +115,13 @@ public static class TinyPool
 {
     private static Dictionary<string, Pool> m_pools;
 
-    public static void CreatePool(GameObject prefab, string poolID, int initialPoolSize, int maxPoolSize = 50, GameObject objectsParent = null)
+    public static void Initialize()
     {
         m_pools = new Dictionary<string, Pool>();
+    }
+
+    public static void CreatePool(GameObject prefab, string poolID, int initialPoolSize, int maxPoolSize = 50, GameObject objectsParent = null)
+    {
         Pool pool = new Pool(prefab, initialPoolSize, maxPoolSize, objectsParent);
         m_pools.Add(poolID, pool);
     }
@@ -142,13 +146,13 @@ public static class TinyPool
         m_pools[poolID].Destroy(pooledObject);
     }
 
-    public static void ExtendPool(string poolID, int extendQuantity)
+    public static void ExpandPool(string poolID, int extendQuantity)
     {
         if (!m_pools.ContainsKey(poolID))
         {
-            Debug.LogError("Trying to extend a pool using an invalid ID");
+            Debug.LogError("Trying to expand a pool using an invalid ID");
             return;
         }
-        m_pools[poolID].Extend(extendQuantity);
+        m_pools[poolID].Expand(extendQuantity);
     }
 }
