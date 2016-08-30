@@ -80,13 +80,19 @@ public class Pool
         poolableObject.Destroy();
     }
 
-    public void Expand(int extendQuantity)
+    public void Expand(int expandQuantity)
     {
-        if (extendQuantity + m_pooledObjects.Count > m_maxPoolSize)
+        if(expandQuantity < 1 || m_maxPoolSize == m_pooledObjects.Count)
         {
-            extendQuantity = m_maxPoolSize - extendQuantity;
+            return;
         }
-        PoolObjects(extendQuantity);
+
+        if (expandQuantity + m_pooledObjects.Count > m_maxPoolSize)
+        {
+            expandQuantity = m_maxPoolSize - m_pooledObjects.Count;
+        }
+
+        PoolObjects(expandQuantity);
     }
 
     private void PoolObjects(int quantity)
